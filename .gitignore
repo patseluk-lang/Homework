@@ -1,5 +1,24 @@
-.venv/
-.idea/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
 .pytest_cache/
+
+# Віртуальні оточення
+venv/
+.venv/
+env/
+
+# PyCharm
+.idea/
+
+# Бази даних SQLite
+*.db
+*.sqlite3
+
+# Змінні середовища
+.env
+
+# Windows
+Thumbs.db
+desktop.ini
