@@ -11,3 +11,4 @@
 | [Online_store_management_system](Online_store_management_system) | Обробка замовлення в інтернет-магазині |
 | [WAD_HW_20260912](WAD_HW_20260912) | Вдосконалення завдання номер 5 WAD_HW_20260905                                                    |
 | [Cinema](Cinema) | Консольний застосунок, що імітує роботу невеликого онлайн-кінотеатру                                                    |
+| [WAD_HW_20260917](WAD_HW_20260917) | Веб-скрапінг OLX (BeautifulSoup, SQLite) |
