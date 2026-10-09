@@ -16,7 +16,7 @@ from contextlib import contextmanager
 import mysql.connector
 from mysql.connector import errorcode
 
-# --- Налаштування підключення -------------------------------------------------
+# Налаштування підключення
 # Значення перевизначаються змінними оточення, щоб не тримати пароль у коді.
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
