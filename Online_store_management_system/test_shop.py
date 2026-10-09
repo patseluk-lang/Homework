@@ -21,7 +21,7 @@ def make_order(number: int = 1, price=1000) -> Order:
     return order
 
 
-# --- Factory --------------------------------------------------------------
+# Factory
 def test_factory_creates_all_types():
     p1 = ProductFactory.create("simple", name="A", price=100, weight=1.0)
     p2 = ProductFactory.create("digital", name="B", price=100, size_mb=10)
@@ -57,7 +57,7 @@ def test_prices_are_decimal():
     assert p.price == Decimal("99.90")
 
 
-# --- Decorator (точність Decimal) -----------------------------------------
+# Decorator (точність Decimal)
 def test_decorator_chain_totals():
     order = make_order(price=1000)
     assert order.total() == Decimal("1000.00")
@@ -77,7 +77,7 @@ def test_promo_never_below_zero():
     assert order.total() == Decimal("0.00")
 
 
-# --- State (поведінка залежить від стану) ---------------------------------
+# State (поведінка залежить від стану)
 def test_pay_requires_method():
     order = make_order()
     assert order.pay() is False
@@ -128,7 +128,7 @@ def test_new_order_can_be_cancelled():
     assert order.status is OrderStatus.CANCELLED
 
 
-# --- Undo -----------------------------------------------------------------
+# Undo
 def test_undo_removes_last_extra():
     order = make_order(price=1000)
     ref = OrderRef(order)
@@ -168,7 +168,7 @@ def test_undo_on_empty_history_is_safe(capsys):
     assert "Немає дій" in capsys.readouterr().out
 
 
-# --- Observer -------------------------------------------------------------
+# Observer
 class _Recorder(Observer):
     def __init__(self):
         self.events = []
@@ -191,7 +191,7 @@ def test_observer_subscribe_and_unsubscribe():
     assert len(rec.events) == 1
 
 
-# --- Command queue --------------------------------------------------------
+# Command queue
 def test_command_queue_runs_sequentially():
     shop = Shop("Тест-магазин")
     ref = OrderRef()
@@ -211,6 +211,6 @@ def test_shop_numbering_starts_at_152():
     assert shop.next_number() == 153
 
 
-# --- Singleton ------------------------------------------------------------
+# Singleton
 def test_logger_is_singleton():
     assert Logger() is Logger()

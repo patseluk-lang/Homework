@@ -25,9 +25,7 @@ def money(value) -> Decimal:
     return Decimal(str(value)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
 
-# ----------------------------------------------------------------------
 # 8. Логування - Singleton
-# ----------------------------------------------------------------------
 class Logger:
     """Єдиний на всю програму логер."""
 
@@ -52,9 +50,7 @@ class Logger:
         self._records.clear()
 
 
-# ----------------------------------------------------------------------
 # 1. Товари - Factory
-# ----------------------------------------------------------------------
 class Product(ABC):
     def __init__(self, name: str, price) -> None:
         self.name = name
@@ -119,9 +115,7 @@ class ProductFactory:
         return product
 
 
-# ----------------------------------------------------------------------
 # 3. Оплата - Strategy
-# ----------------------------------------------------------------------
 class PaymentMethod(ABC):
     name: str = "оплата"
 
@@ -164,9 +158,7 @@ class CryptoPayment(PaymentMethod):
         return True
 
 
-# ----------------------------------------------------------------------
 # 4. Доставка - Strategy
-# ----------------------------------------------------------------------
 class DeliveryMethod(ABC):
     name: str = "доставка"
 
@@ -205,9 +197,7 @@ class PickupDelivery(DeliveryMethod):
         return f"самовивіз з точки {self.point}"
 
 
-# ----------------------------------------------------------------------
 # 2. Статус замовлення - Enum
-# ----------------------------------------------------------------------
 class OrderStatus(Enum):
     NEW = "Нове"
     PROCESSING = "В обробці"
@@ -216,9 +206,7 @@ class OrderStatus(Enum):
     CANCELLED = "Скасовано"
 
 
-# ----------------------------------------------------------------------
 # 5. Сповіщення - Observer
-# ----------------------------------------------------------------------
 @dataclass
 class Event:
     kind: str            # "status" або "message"
@@ -297,9 +285,7 @@ class Publisher:
             observer.update(event)
 
 
-# ----------------------------------------------------------------------
 # 6. Додаткові послуги - Decorator
-# ----------------------------------------------------------------------
 class PriceComponent(ABC):
     @abstractmethod
     def total(self) -> Decimal:
@@ -380,9 +366,7 @@ class Insurance(OrderExtra):
         return f"страхування (+{self.price:.2f} грн)"
 
 
-# ----------------------------------------------------------------------
 # 2. Стани замовлення - State
-# ----------------------------------------------------------------------
 class OrderState(ABC):
     status: OrderStatus
 
@@ -449,9 +433,7 @@ class CancelledState(OrderState):
         return self._deny(order, "скасувати повторно")
 
 
-# ----------------------------------------------------------------------
 # Замовлення
-# ----------------------------------------------------------------------
 class Order(Publisher):
     def __init__(self, number: int, customer: str) -> None:
         super().__init__()
@@ -465,7 +447,7 @@ class Order(Publisher):
         self._price: PriceComponent = BasePrice(self)
         self._history: list["Command"] = []
 
-    # --- товари й ціна ---
+    # товари й ціна
     def add_product(self, product: Product) -> None:
         self.items.append(product)
         Logger().log(f"До замовлення №{self.number} додано товар: {product.name}")
@@ -499,7 +481,7 @@ class Order(Publisher):
         lines.append(f"Фінальна ціна: {self.total():.2f} грн")
         return "\n".join(lines)
 
-    # --- стратегії ---
+    # стратегії
     def set_payment(self, method: PaymentMethod) -> None:
         self.payment = method
         Logger().log(f"Обрано оплату: {method.name}")
@@ -508,7 +490,7 @@ class Order(Publisher):
         self.delivery = method
         Logger().log(f"Обрано доставку: {method.name} — {method.describe()}")
 
-    # --- стани (публічний API, яким користуються команди) ---
+    # стани (публічний API, яким користуються команди)
     @property
     def status(self) -> OrderStatus:
         return self._state.status
@@ -540,11 +522,11 @@ class Order(Publisher):
     def cancel(self) -> bool:
         return self._state.cancel(self)
 
-    # --- сповіщення ---
+    # сповіщення
     def send_message(self, text: str) -> None:
         self._emit(Event(kind="message", order=self, text=text))
 
-    # --- історія команд ---
+    # історія команд
     def remember(self, command: "Command") -> None:
         self._history.append(command)
 
@@ -583,13 +565,11 @@ class Shop:
         return order
 
 
-# ----------------------------------------------------------------------
 # 7. Черга команд - Command (+ undo)
 #
 # Команди звертаються до замовлення через OrderRef — тримач посилання, який
 # заповнює CreateOrderCommand. Це дозволяє додати всі команди в чергу ще до
 # того, як замовлення фактично створене, без перевірок типу джерела.
-# ----------------------------------------------------------------------
 class OrderRef:
     """Спільне посилання на замовлення для команд у черзі."""
 
@@ -747,9 +727,7 @@ class CommandQueue:
         self._commands.clear()
 
 
-# ----------------------------------------------------------------------
 # Демонстрація
-# ----------------------------------------------------------------------
 def header(text: str) -> None:
     print("\n" + "=" * 60)
     print(text)
