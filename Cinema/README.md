@@ -16,11 +16,13 @@
 
 ```bash
 pip install sqlalchemy psycopg2-binary
+set DATABASE_URL=postgresql+psycopg2://user:password@localhost:5432/online_cinema
 python main.py
 ```
 
-Перед першим запуском треба створити базу `online_cinema` у PostgreSQL і вказати
-власні параметри підключення в `database.py`. Таблиці створюються автоматично —
+Перед першим запуском треба створити базу `online_cinema` у PostgreSQL. Параметри
+підключення беруться зі змінної оточення `DATABASE_URL` (команда `set` — для cmd
+на Windows, на Linux — `export`). Таблиці створюються автоматично —
 `Base.metadata.create_all()` викликається на старті.
 
 Щоб наповнити базу демонстраційними даними, розкоментуй виклик `seed_database()`
